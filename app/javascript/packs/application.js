@@ -4,6 +4,12 @@
 // that code so it'll be compiled.
 
 require("@rails/ujs").start()
+require("bootstrap");
+
+var jQuery = require("jquery");
+// import jQuery from "jquery";
+global.$ = global.jQuery = jQuery;
+window.$ = window.jQuery = jQuery;
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
