@@ -6,7 +6,6 @@ FactoryBot.define do
     answer4 { "#{rand(2001)}" }
 
     sequence(:text) { |n| "В каком году была космическая одиссея #{n}?" }
-
     sequence(:level) { |n| n % 15 }
   end
 end
