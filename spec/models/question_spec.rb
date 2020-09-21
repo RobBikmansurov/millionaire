@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
-  context "validations check" do
+  context 'validations check' do
     # Проверяем наличие валидации
     it { should validate_presence_of :level }
     it { should validate_presence_of :text }
@@ -14,7 +14,7 @@ RSpec.describe Question, type: :model do
   # Проверяем, разрешает ли наша модель значение 14
   it { should allow_value(14).for(:level) }
 
-  describe "validations" do
+  describe 'validations' do
     subject { FactoryBot.create(:question) }
     it { should validate_uniqueness_of(:text) }
   end

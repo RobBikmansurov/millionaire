@@ -8,9 +8,9 @@ RSpec.describe 'users/index', type: :view do
   # Обратите внимание, что мы объекты в базу не кладем, т.к. пишем FactoryBotRails.build_stubbed
   before(:each) do
     assign(:users, [
-      FactoryBotRails.build_stubbed(:user, name: 'Вадик', balance: 5000),
-      FactoryBotRails.build_stubbed(:user, name: 'Миша', balance: 3000),
-    ])
+             FactoryBotRails.build_stubbed(:user, name: 'Вадик', balance: 5000),
+             FactoryBotRails.build_stubbed(:user, name: 'Миша', balance: 3000)
+           ])
 
     render
   end
@@ -31,6 +31,6 @@ RSpec.describe 'users/index', type: :view do
   # (вообще говоря, тест избыточный, т.к. за порядок объектов в @users отвечает контроллер,
   # но чтобы показать, как тестировать порядок элементов на странице, полезно)
   it 'renders player names in right order' do
-    expect(rendered).to match /Вадик.*Миша/m
+    expect(rendered).to match(/Вадик.*Миша/m)
   end
 end

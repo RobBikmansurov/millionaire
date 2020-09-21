@@ -7,12 +7,12 @@ FactoryBot.define do
     prize { 0 }
 
     factory :game_with_questions do
-      after(:build) { |game|
+      after(:build) do |game|
         15.times do |i|
           q = create(:question, level: i)
           create(:game_question, game: game, question: q)
         end
-      }
+      end
     end
   end
 end
