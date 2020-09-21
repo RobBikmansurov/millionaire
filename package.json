@@ -1,5 +1,8 @@
 {
   "name": "millionaire",
+  "description": "training project",
+  "author": "Rob Bikmansurov <robb@mail.ru>",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --mode development --open --host 0.0.0.0"

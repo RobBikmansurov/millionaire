@@ -15,10 +15,10 @@ gem 'rails-i18n', '~> 6.0.0'
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug'
-  ##gem 'rspec-rails'
-  ##gem 'factory_bot_rails'
-  ##gem 'shoulda-matchers'
-  ##gem 'capybara'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
   ##gem 'launchy'
 end
 
