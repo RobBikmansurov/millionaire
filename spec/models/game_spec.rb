@@ -16,8 +16,8 @@ RSpec.describe Game, type: :model do
       # создaли игру, обернули в блок, на который накладываем проверки
       expect do
         game = Game.create_game_for_user!(user)
-      end.to change(Game, :count).by(1).and( # проверка: Game.count изменился на 1 (создали в базе 1 игру)
-        change(GameQuestion, :count).by(15).and( # GameQuestion.count +15
+      end.to change(Game, :count).by(1).and(# проверка: Game.count изменился на 1 (создали в базе 1 игру)
+        change(GameQuestion, :count).by(15).and(# GameQuestion.count +15
           change(Question, :count).by(0) # Game.count не должен измениться
         )
       )
@@ -105,6 +105,28 @@ RSpec.describe Game, type: :model do
 
     it '.current_game_question returns first game_question' do
       expect(game_w_questions.current_game_question).to eq(game_w_questions.game_questions.first)
+    end
+  end
+
+  context '.answer_current_question!' do
+    let(:question) { game_w_questions.current_game_question }
+    it 'correct answer - returns true' do
+      expect(game_w_questions.answer_current_question!(question.correct_answer_key)).to be_truthy
+    end
+    it 'wrong answer - returns false' do
+      expect(game_w_questions.answer_current_question!('a')).to be_falsey
+    end
+    it 'expired game - returns false' do
+      game_w_questions.created_at = 1.hour.ago
+      expect(game_w_questions.answer_current_question!(question.correct_answer_key)).to be_falsey
+    end
+    it 'finished game - returns false' do
+      game_w_questions.finished_at = Time.now
+      expect(game_w_questions.answer_current_question!(question.correct_answer_key)).to be_falsey
+    end
+    it 'on last correct question - returns true' do
+      game_w_questions.current_level = 14
+      expect(game_w_questions.answer_current_question!(question.correct_answer_key)).to be_truthy
     end
   end
 end
