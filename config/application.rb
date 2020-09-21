@@ -31,5 +31,13 @@ module Millionaire
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.time_zone = 'Ekaterinburg' # UTC+5
+
+    config.i18n.default_locale = :ru
+    config.i18n.locale = :ru
+    config.i18n.available_locales = %i[en ru]
+
+    config.i18n.fallbacks = [:en]
   end
 end
