@@ -16,6 +16,7 @@ body, html {
   font-family: Arial, sans-serif;
   height: 100%;
   /* background-image: url(<%= asset_path ('bg.jpg') %>); */
+  background-color: navy;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
