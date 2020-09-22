@@ -16,8 +16,8 @@ RSpec.describe Game, type: :model do
       # создaли игру, обернули в блок, на который накладываем проверки
       expect do
         game = Game.create_game_for_user!(user)
-      end.to change(Game, :count).by(1).and(# проверка: Game.count изменился на 1 (создали в базе 1 игру)
-        change(GameQuestion, :count).by(15).and(# GameQuestion.count +15
+      end.to change(Game, :count).by(1).and( # проверка: Game.count изменился на 1 (создали в базе 1 игру)
+        change(GameQuestion, :count).by(15).and( # GameQuestion.count +15
           change(Question, :count).by(0) # Game.count не должен измениться
         )
       )

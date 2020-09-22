@@ -19,6 +19,11 @@ Style/Documentation:
     - 'test/**/*'
     - 'db/migrate/*'
 
+Metrics/BlockLength:
+  Exclude:
+    - 'config/**/*'
+    - 'spec/**/*'
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 Layout/EmptyLinesAroundAttributeAccessor:
