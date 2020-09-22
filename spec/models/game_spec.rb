@@ -121,7 +121,7 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.finished?).to be(true)
     end
     it 'expired game - returns false' do
-      game_w_questions.created_at = 1.hour.ago
+      game_w_questions.created_at = Game::TIME_LIMIT.ago
       expect(game_w_questions.answer_current_question!(question.correct_answer_key)).to be(false)
       expect(game_w_questions.status).to eq(:timeout)
       expect(game_w_questions.finished?).to be(true)

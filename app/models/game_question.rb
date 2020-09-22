@@ -62,6 +62,17 @@ class GameQuestion < ApplicationRecord
     variants[correct_answer_key]
   end
 
+  def apply_help!(help_type)
+    case help_type.to_sym
+    when :fifty_fifty
+      add_fifty_fifty
+    when :audience_help
+      add_audience_help
+    when :friend_call
+      add_friend_call
+    end
+  end
+
   # Добавляем в help_hash по ключю fifty_fifty - массив из двух вариантов: правильный и случайный
   # и сохраняем объект
   def add_fifty_fifty
