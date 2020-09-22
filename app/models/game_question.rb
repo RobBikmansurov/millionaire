@@ -1,29 +1,18 @@
-#  (c) goodprogrammer.ru
-#
-
 require 'game_help_generator'
 
 # Игровой вопрос — при создании новой игры формируется массив
 # из 15 игровых вопросов для конкретной игры и игрока.
 class GameQuestion < ApplicationRecord
   belongs_to :game
-
-  # вопрос из которого берется вся информация
   belongs_to :question
 
-  # создаем в этой модели виртуальные геттеры text, level, значения которых
-  # автоматически берутся из связанной модели question
   delegate :text, :level, to: :question, allow_nil: true
 
   # без игры и вопроса - игровой вопрос не имеет смысла
   validates :game, :question, presence: true
-
   # в полях a,b,c,d прячутся индексы ответов из объекта :game
   validates :a, :b, :c, :d, inclusion: { in: 1..4 }
 
-  # Автоматическая сериализация поля в базу (мы юзаем как обычный хэш,
-  # а рельсы в базе хранят как строчку)
-  # см. ссылки в материалах урока
   serialize :help_hash, Hash
 
   # help_hash у нас имеет такой формат:
