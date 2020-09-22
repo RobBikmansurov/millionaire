@@ -83,5 +83,32 @@ RSpec.describe GamesController, type: :controller do
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
       expect(response).to redirect_to(game_path(game))
     end
+
+    it 'takes money' do
+      # вручную поднимем уровень до выигрыша 200
+      game_w_questions.update_attribute(:current_level, 2)
+
+      put :take_money, params: { id: game_w_questions.id }
+      game = assigns(:game)
+      expect(game.finished?).to be(true)
+      expect(game.prize).to eq(200)
+
+      user.reload
+      expect(user.balance).to eq(200)
+
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:warning]).to be
+    end
+
+    it 'not create new game if previouse not finished' do
+      expect(game_w_questions.finished?).to be(false) # previouse game exists
+      expect { post :create }.to change(Game, :count).by(0) # try to create new game
+
+      game = assigns(:game)
+      expect(game).to be_nil
+      expect(flash[:alert]).to be
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to(game_path(game_w_questions))
+    end
   end
 end
