@@ -48,10 +48,5 @@ RSpec.describe GameQuestion, type: :model do
     it '.correct_answer_key returns b' do
       expect(game_question.correct_answer_key).to eq('b')
     end
-    it '.correct_answer_key does not return a | c | d' do
-      expect(game_question.correct_answer_key).not_to eq('a')
-      expect(game_question.correct_answer_key).not_to eq('c')
-      expect(game_question.correct_answer_key).not_to eq('d')
-    end
   end
 end
