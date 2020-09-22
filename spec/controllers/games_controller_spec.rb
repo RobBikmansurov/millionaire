@@ -1,12 +1,6 @@
 require 'rails_helper'
 require 'support/my_spec_helper' # наш собственный класс с вспомогательными методами
 
-# Тестовый сценарий для игрового контроллера
-# Самые важные здесь тесты:
-#   1. на авторизацию (чтобы к чужим юзерам не утекли не их данные)
-#   2. на четкое выполнение самых важных сценариев (требований) приложения
-#   3. на передачу граничных/неправильных данных в попытке сломать контроллер
-#
 RSpec.describe GamesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   let(:another_user) { FactoryBot.create(:user) }
@@ -16,10 +10,38 @@ RSpec.describe GamesController, type: :controller do
   context 'Anonymous' do
     it 'can not #show' do
       get :show, params: { id: game_w_questions.id }
-
       expect(response.status).not_to eq(200) # статус не 200 ОК
       expect(response).to redirect_to(new_user_session_path) # devise должен отправить на логин
-      expect(flash[:alert]).to be # во flash должен быть прописана ошибка
+      expect(flash[:alert]).to be # во flash будет ошибка
+    end
+
+    it 'can not #create' do
+      generate_questions(15)
+      post :create
+      game = assigns(:game)
+      forbidden_action_for_anonymous(game)
+    end
+
+    it 'can not #answer' do
+      letter = game_w_questions.current_game_question.correct_answer_key
+      put :answer, params: { id: game_w_questions.id, letter: letter }
+      game = assigns(:game)
+      forbidden_action_for_anonymous(game)
+    end
+
+    it 'can not #take_money' do
+      game_w_questions.update_attribute(:current_level, 2)
+      put :take_money, params: { id: game_w_questions.id }
+      game = assigns(:game)
+      forbidden_action_for_anonymous(game)
+    end
+
+    it 'can not #help' do
+      expect(game_w_questions.current_game_question.help_hash[:audience_help]).not_to be
+      expect(game_w_questions.audience_help_used).to be(false)
+      put :help, params: { id: game_w_questions.id, help_type: :audience_help }
+      game = assigns(:game)
+      forbidden_action_for_anonymous(game)
     end
   end
 
@@ -77,7 +99,7 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
 
       # проверяем, что игра не закончилась, что флажок установился, и подсказка записалась
-      expect(game.finished?).to be_falsey
+      expect(game.finished?).to be(false)
       expect(game.audience_help_used).to be(true)
       expect(game.current_game_question.help_hash[:audience_help]).to be
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
@@ -110,5 +132,11 @@ RSpec.describe GamesController, type: :controller do
       expect(response.status).to eq(302)
       expect(response).to redirect_to(game_path(game_w_questions))
     end
+  end
+
+  def forbidden_action_for_anonymous(game)
+    expect(game).to be_nil
+    expect(response).to redirect_to(new_user_session_path)
+    expect(flash[:alert]).to be
   end
 end
