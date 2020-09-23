@@ -6,6 +6,8 @@ RSpec.describe GamesController, type: :controller do
   let(:another_user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:user, is_admin: true) }
   let(:game_w_questions) { FactoryBot.create(:game_with_questions, user: user) }
+  let(:right_letter) { game_w_questions.current_game_question.correct_answer_key }
+
 
   context 'Anonymous' do
     it 'can not #show' do
@@ -23,8 +25,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'can not #answer' do
-      letter = game_w_questions.current_game_question.correct_answer_key
-      put :answer, params: { id: game_w_questions.id, letter: letter }
+      put :answer, params: { id: game_w_questions.id, letter: right_letter }
       game = assigns(:game)
       forbidden_action_for_anonymous(game)
     end
@@ -72,14 +73,14 @@ RSpec.describe GamesController, type: :controller do
     it 'can`t #show another user game' do
       sign_in another_user
       get :show, params: { id: game_w_questions.id }
+
       expect(response.status).to eq(302)
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to be
     end
     # юзер отвечает на игру корректно - игра продолжается
     it 'answers correct' do
-      letter = game_w_questions.current_game_question.correct_answer_key
-      put :answer, params: { id: game_w_questions.id, letter: letter }
+      put :answer, params: { id: game_w_questions.id, letter: right_letter }
       game = assigns(:game)
 
       expect(game.finished?).to be(false)
@@ -89,8 +90,8 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'answers wrong' do
-      letter = game_w_questions.current_game_question.correct_answer_key.next == 'a' ? 'b' : 'a'
-      put :answer, params: { id: game_w_questions.id, letter: letter }
+      wrong_letter = right_letter == 'a' ? 'b' : 'a'
+      put :answer, params: { id: game_w_questions.id, letter: wrong_letter }
       game = assigns(:game)
 
       expect(game.finished?).to be(true)
@@ -141,6 +142,20 @@ RSpec.describe GamesController, type: :controller do
       expect(flash[:alert]).to be
       expect(response.status).to eq(302)
       expect(response).to redirect_to(game_path(game_w_questions))
+    end
+
+    it 'get help once' do
+      %i[fifty_fifty audience_help friend_call].each_with_index do |help_type, i|
+        put :help, params: { id: game_w_questions.id, help_type: help_type }
+        expect(flash[:info]).to match(I18n.t('controllers.games.help_used'))
+        expect(flash[:alert]).to be_nil if i.zero?
+        expect(response).to redirect_to(game_path(game_w_questions))
+
+        put :help, params: { id: game_w_questions.id, help_type: help_type }
+        expect(flash[:info]).to match(I18n.t('controllers.games.help_used'))
+        expect(flash[:alert]).to match(I18n.t('controllers.games.help_not_used'))
+        expect(response).to redirect_to(game_path(game_w_questions))
+      end
     end
   end
 
