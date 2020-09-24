@@ -5,6 +5,18 @@ require File.expand_path('../config/environment', __dir__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'database_cleaner/active_record'
+require "test_prof/recipes/logging"
+
+TestProf.configure do |config|
+  # the directory to put artifacts (reports) in ('tmp/test_prof' by default)
+  config.output_dir = "tmp/test_prof"
+
+  # use unique filenames for reports (by simply appending current timestamp)
+  config.timestamps = true
+
+  # color output
+  config.color = true
+end
 
 # Add additional requires below this line. Rails is not loaded until this point!
 Shoulda::Matchers.configure do |config|
@@ -70,7 +82,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include Devise::TestHelpers, type: :view
+  config.include Devise::Test::ControllerHelpers, type: :view
 
   config.include Warden::Test::Helpers, type: :feature
 

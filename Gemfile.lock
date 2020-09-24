@@ -121,6 +121,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    launchy (2.5.0)
+      addressable (~> 2.7)
     loofah (2.7.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -242,6 +244,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
     temple (0.8.2)
+    test-prof (0.12.2)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -275,6 +278,7 @@ DEPENDENCIES
   devise
   devise-i18n
   factory_bot_rails
+  launchy
   pg
   puma (~> 5.0)
   rails (~> 6.0.3)
@@ -285,6 +289,7 @@ DEPENDENCIES
   rspec-rails
   shoulda-matchers
   sqlite3
+  test-prof
   web-console
   webpacker (~> 4.0)
 

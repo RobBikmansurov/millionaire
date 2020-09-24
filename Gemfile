@@ -20,7 +20,8 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'capybara'
-  ##gem 'launchy'
+  gem 'launchy' # save_and_open_page in features spec
+  gem 'database_cleaner-active_record'
 end
 
 group :development do
@@ -28,7 +29,7 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner-active_record'
+  gem 'test-prof'
 end
 
 group :production do
