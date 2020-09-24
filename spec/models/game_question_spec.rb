@@ -35,7 +35,7 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.help_hash).to have_key(:fifty_fifty)
       fifty_fifty = game_question.help_hash[:fifty_fifty]
       expect(fifty_fifty.count).to eq(2)
-      expect(fifty_fifty).to be_a(Array)
+      expect(fifty_fifty).to be_an(Array)
     end
     it '.audience_help' do
       game_question.add_audience_help
