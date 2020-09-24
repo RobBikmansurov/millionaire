@@ -14,5 +14,19 @@ FactoryBot.define do
         end
       end
     end
+
+    trait :prized do
+      prize { 8000 }
+      current_level { 8 }
+      created_at { 59.minutes.ago}
+      finished_at { 40.minutes.ago }
+    end
+    trait :expired do
+      prize { 0 }
+      current_level { 2 }
+      created_at { 2.hours.ago}
+      finished_at { 5.minutes.ago }
+      is_failed { true }
+    end
   end
 end
